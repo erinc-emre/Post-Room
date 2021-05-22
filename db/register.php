@@ -14,6 +14,9 @@ include('dbConnection.php');
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
 </head>
 <body>
+<?php   $fNameErr = $lNameErr = $emailErr = $passwordErr = $claimPasswordErr = $telephoneErr=$genderErr = "";
+  $departmentErr = $instErr = $differentPasswordErr = $telephoneErr2 = $pictureErr =$birthErr= ""; ?>
+
 <?php 
   function test_input($data)
   {
@@ -22,10 +25,14 @@ include('dbConnection.php');
     $data = htmlspecialchars($data);
     return $data;
   } 
-  $fNameErr = $lNameErr = $emailErr = $passwordErr = $claimPasswordErr = $telephoneErr=$genderErr = "";
-  $departmentErr = $instErr = $differentPasswordErr = $telephoneErr2 = $pictureErr =$birthErr= "";
+  
 
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+  
+  if (isset($_POST['submit']) && $_FILES['fileName']['size'] > 0) {
+    $fileName = $_FILES['fileName']['name'];
+    $picture = file_get_contents($fileName);
     if (empty($_POST["fName"])) {
       $fNameErr = "*First name is required.";
     } else {
@@ -70,17 +77,11 @@ include('dbConnection.php');
     } else {
       $inst = test_input($_POST["institution"]);
     }
-    if (empty($_POST["picture"])) {
-      $pictureErr = "*Picture is required.";
-    } 
-    if (empty($_POST["gender"]) && empty($_POST["gender2"]) && empty($_POST["gender3"])) {
+
+    if (empty($_POST["gender"])) {
       $genderErr = "*Gender is required.";
-    } else if(empty($_POST["gender"]) && empty($_POST["gender2"])) {
-      $gender = test_input($_POST["gender3"]);
-    }else if(empty($_POST["gender"]) && empty($_POST["gender3"])) {
-      $gender = test_input($_POST["gender2"]);
-    }else if(empty($_POST["gender3"]) && empty($_POST["gender2"])) {
-      $gender = test_input($_POST["gender1"]);
+    } else{
+      $gender=$_POST['gender'];
     }
     if (empty($_POST["birth"])) {
       $birthErr = "*Date of birth is required.";
@@ -88,16 +89,16 @@ include('dbConnection.php');
       $birth = test_input($_POST["birth"]);
     }
 
-  }
-  $fileName = $_FILES['fileName']['picture'];
-  $picture = file_get_contents($fileName);
+  
+ 
   $status = "member";
   date_default_timezone_set('Europe/Istanbul');
   $registerDate = date("Y-m-d h:i:sa");
   
   $stmt = $conn->prepare("INSERT INTO user(fName,lName,email,phone,password,sex,registerDate,status,profilePhoto, institution, department, DOB) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
   
-  if ($stmt != false) {
+  if ($stmt != false ) {
+    if($password != ""){
     $stmt->bind_param('ssssssssssss',$fName, $lName, $email, $telephone, $password,$gender,$registerDate, $status, $picture, $inst, $department, $birth);
     if($stmt->execute()){
       ?> <p class="success"><?php echo "Registiration successful"; ?></p> <?php
@@ -105,18 +106,16 @@ include('dbConnection.php');
       ?> <p class="fail"><?php echo "Registiration failed"; ?></p> <?php
    }
     $stmt->close();
-  } else {
+  }} else {
     die('prepare() failed: ' . htmlspecialchars($conn->error));
   }
-
+  }
   ?>
-
-
 <div class="container">
 <br>
 <h1 >SIGN UP</h1>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
 <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">First Name</label>
   <textarea class="form-control" name="fName" rows="1" required></textarea>
@@ -164,9 +163,8 @@ include('dbConnection.php');
 </div>
  
   <div class="mb-3">
-  <label for="formFile" class="form-label">Pick a profile picture</label>
-  <input class="form-control" type="file" placeholder="Name" name="picture" required><br><br>
-    <input name="fileName" type="file" class="form-control-file" id="exampleFormControlFile1" ><br><br>
+  <label for="formFile" class="form-label">Pick a profile picture</label><br>
+    <input name="fileName" type="file" class="form-control-file" id="exampleFormControlFile1" required><br><br>
   <span class="error"> <?php echo $pictureErr; ?></span>
 </div>
 <div class="exampleFormControlTextarea1">
@@ -179,37 +177,39 @@ include('dbConnection.php');
 <br>
 <label for="exampleFormControlTextarea1" class="form-label">Gender</label>
   <div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" name="gender">
+  <input class="form-check-input" type="radio" name="gender">
   <label class="form-check-label" for="flexRadioDefault1">
     Female
   </label>
 </div>
 <div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" name="gender2" >
+  <input class="form-check-input" type="radio"name="gender" >
   <label class="form-check-label" for="flexRadioDefault2">
    Male
   </label>
 </div>
 <div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" name="gender3" >
+  <input class="form-check-input" type="radio" name="gender" >
   <label class="form-check-label" for="flexRadioDefault2">
    I do not want to say
   </label>
   <span class="error"> <?php echo $genderErr; ?></span>
 </div>
-
 </div>
 
 <br>
 
-  <button type="submit" class="btn btn-primary">Sign Up</button>
+  <button id="button" type="submit" name= "submit" class="btn btn-primary">Sign Up</button>
   <br><br>
-  <a href="login.php">Do you have an account? Click here to sign in.</a>
+  <a id="login" href="login.php">Do you have an account? Click here to sign in.</a>
 
 </form>
 </div>
   
 </div>
+
+
+
 
 </body>
 </html>

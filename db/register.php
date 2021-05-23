@@ -89,17 +89,15 @@ include('dbConnection.php');
       $birth = test_input($_POST["birth"]);
     }
 
-  
- 
-  $status = "member";
+
   date_default_timezone_set('Europe/Istanbul');
   $registerDate = date("Y-m-d h:i:sa");
   
-  $stmt = $conn->prepare("INSERT INTO user(fName,lName,email,phone,password,sex,registerDate,status,profilePhoto, institution, department, DOB) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+  $stmt = $conn->prepare("INSERT INTO user(fName,lName,email,phone,password,sex,registerDate,profilePhoto, institution, department, DOB) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
   
   if ($stmt != false ) {
     if($password != ""){
-    $stmt->bind_param('ssssssssssss',$fName, $lName, $email, $telephone, $password,$gender,$registerDate, $status, $picture, $inst, $department, $birth);
+    $stmt->bind_param('ssssssssssss',$fName, $lName, $email, $telephone, $password,$gender,$registerDate, $picture, $inst, $department, $birth);
     if($stmt->execute()){
       ?> <p class="success"><?php echo "Registiration successful"; ?></p> <?php
    }else{

@@ -37,6 +37,33 @@ $rows3=mysqli_fetch_assoc($result3);
   </li>
   </ul>
 <?php 
+$commentOwnerId= 1;
+
+if (isset($_POST['submit']) ) {
+  if (empty($_POST["comment"])) {
+     echo "null comment";
+  } else {
+    $comment = $_POST["comment"];
+  }
+  date_default_timezone_set('Europe/Istanbul');
+  $commentDate = date("Y-m-d h:i:sa");
+  
+  $stmt = $conn->prepare("INSERT INTO comment(postId,commentOwnerId,commentText,commentDate) VALUES (?,?,?,?)");
+  
+  if ($stmt != false ) {
+    if($password != ""){
+    $stmt->bind_param('ssss',$postId,$commentOwnerId,$comment,$commentDate);
+    if($stmt->execute()){
+      ?> <p class="success"><?php echo "added." ?></p> <?php
+   }else{
+      ?> <p class="fail"><?php echo "Registiration failed"; ?></p> <?php
+   }
+    $stmt->close();
+  }} else {
+    die('prepare() failed: ' . htmlspecialchars($conn->error));
+  }
+}
+$myId = 1;
 $result=mysqli_query($conn,"SELECT * FROM content");
 
 while($rows=mysqli_fetch_assoc($result)){
@@ -45,6 +72,12 @@ while($rows=mysqli_fetch_assoc($result)){
 <br><br>
 
   <div class="card">
+  <?php
+  if($rows['postOwnerId']== $myId ){ ?>
+    <a href="deletePost.php?contentId=<?php echo $rows['contentId']; ?>" class="btn btn-secondary">Delete</a>
+    <?php
+  }
+  ?>
   <div class="card-header">
   <a href="#" >
   <?php  echo $rows['contentTitle']; ?> </a> - 
@@ -64,7 +97,22 @@ echo $rows['contentText']; ?></p>
     
   </div>
   </div>
-  <?php }} ?>
+
+  <?php 
+if($rows['typeId'] == 1){ ?>
+<form method="POST" >
+  <div class="input-group mb-3">
+  <input type="text" class="form-control" name="comment" placeholder="Give a comment" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-outline-secondary" name="submit" type="submit" id="button-addon2">Share</button>
+</div>
+</form>
+<?php
+}
+}} 
+
+
+
+?>
 </div>
 
 </body>

@@ -6,7 +6,7 @@ session_start();
 //$id = intval($_GET['roomId']);
 $result=mysqli_query($conn,"SELECT * FROM content");
 $rows=mysqli_fetch_assoc($result);
-$roomID = $rows['roomId'];
+$roomID = $_SESSION['ROOMID'];
 $result3 = mysqli_query($conn,"SELECT * FROM room WHERE roomId = $roomID");
 $rows3=mysqli_fetch_assoc($result3);
 ?>
@@ -21,7 +21,7 @@ $rows3=mysqli_fetch_assoc($result3);
 <ul class="nav nav-tabs">
 
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="contentsOfaRoom.php"><?php echo $rows3['roomName'] ?></a>
+    <a class="nav-link" aria-current="page" href="contentsOfaRoom.php?roomId=<?php echo $_SESSION['ROOMID']; ?>"><?php echo $_SESSION['ROOMID'] ?></a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="descriptionOfRoom.php">Description of the room</a>

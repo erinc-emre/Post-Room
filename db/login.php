@@ -16,7 +16,10 @@ session_start();
 </head>
 <body>
 <?php 
+
   $unameErr = $pwdErr = "";
+
+
 
   if($_SERVER["REQUEST_METHOD"]=="POST"){
     if(empty($_POST["email"]) || empty($_POST["password"])){
@@ -39,10 +42,14 @@ session_start();
   
                 $_SESSION['email']= $dbEmail;
                 $_SESSION['password']= $dbPassword;
-               
+            
+                $sqlID="SELECT userId FROM user WHERE email='$email'";
+                $resultID= mysqli_query($conn,$sqlID);
+               $rowID = mysqli_fetch_assoc($resultID);
+               $_SESSION['loginId'] = $rowID['userId'];
                 $_SESSION['loggedIn'] = true;
   
-                  header("Location: homepage_rooms.php");  
+                  header("Location: rooms.php");  
                   
                 }
           }

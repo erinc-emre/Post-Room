@@ -6,7 +6,7 @@ session_start();
 //$id = intval($_GET['roomId']);
 $result=mysqli_query($conn,"SELECT * FROM content");
 $rows=mysqli_fetch_assoc($result);
-$roomID = $rows['roomId'];
+$roomID = $_SESSION['ROOMID'];
 $result3 = mysqli_query($conn,"SELECT * FROM room WHERE roomId = $roomID");
 $rows3=mysqli_fetch_assoc($result3);
 
@@ -26,7 +26,7 @@ $titleErr = $descErr = $dateErr = "";
 <ul class="nav nav-tabs">
 
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="contentsOfaRoom.php"><?php echo $rows3['roomName'] ?></a>
+    <a class="nav-link" aria-current="page" href="contentsOfaRoom.php?roomId=<?php echo $_SESSION['ROOMID']; ?>"><?php echo $_SESSION['ROOMID'] ?></a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="descriptionOfRoom.php">Description of the room</a>
@@ -107,8 +107,8 @@ if (isset($_POST['submit']) ) {
    
   date_default_timezone_set('Europe/Istanbul');
   $publishedDate = date("Y-m-d h:i:sa");
-  $roomID = $rows3['roomId'];
-  $postOwnerId=1 ;
+  $roomID = $_SESSION['ROOMID'];
+  $postOwnerId=$_SESSION['loginId'] ;
   $typeId=0;
   $null = " ";
   $contentId = 1 +$row['contentId'];

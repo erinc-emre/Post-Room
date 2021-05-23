@@ -97,7 +97,7 @@ include('dbConnection.php');
   
   if ($stmt != false ) {
     if($password != ""){
-    $stmt->bind_param('ssssssssssss',$fName, $lName, $email, $telephone, $password,$gender,$registerDate, $picture, $inst, $department, $birth);
+    $stmt->bind_param('sssssssssss',$fName, $lName, $email, $telephone, $password,$gender,$registerDate, $picture, $inst, $department, $birth);
     if($stmt->execute()){
       ?> <p class="success"><?php echo "Registiration successful"; ?></p> <?php
    }else{

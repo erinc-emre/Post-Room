@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,7 +167,14 @@ $(document).ready(function(){
                 <tbody>
 <?php 
 include"dbConnection.php"; 
-$assigmentId = 1; // elle girdim düzeltilecek
+$contentId = ($_GET['contentId']);
+$sql_id = "SELECT * FROM assignment WHERE contentId='$contentId'";
+$result_id = mysqli_query($conn, $sql_id);
+$row_id=mysqli_fetch_assoc($result_id);
+
+
+$assigmentId = $row_id['assignmentId'];
+ // elle girdim düzeltilecek
 $assignments = "SELECT user.fName, user.lName,assignmentresults.id, assignmentresults.grade 
                     FROM user INNER JOIN assignmentresults ON user.userId = assignmentresults.userId 
                     WHERE assignmentresults.assignmentId = $assigmentId ORDER BY assignmentresults.grade DESC";

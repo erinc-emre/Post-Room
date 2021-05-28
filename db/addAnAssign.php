@@ -37,6 +37,9 @@ $titleErr = $descErr = $dateErr = "";
   <li class="nav-item">
     <a class="nav-link" href="addApost.php">Add a new post</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="logout.php">Logout</a>
+  </li>
   </ul>
 <br><br>
 <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
@@ -120,9 +123,9 @@ if (isset($_POST['submit']) ) {
     $stmt2->bind_param('ssss',$date,$null,$null, $contentId);
     if($stmt->execute()){
       if($stmt2->execute()){
-      ?> <p class="success"><?php echo "Registiration successful"; ?></p> <?php
+      ?> <p class="success"><?php echo " successful"; ?></p> <?php
    }}else{
-      ?> <p class="fail"><?php echo "Registiration failed"; ?></p> <?php
+      ?> <p class="fail"><?php echo " failed"; ?></p> <?php
    }
   }
     $stmt->close();

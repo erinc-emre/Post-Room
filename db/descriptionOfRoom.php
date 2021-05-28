@@ -26,11 +26,16 @@ $rows3=mysqli_fetch_assoc($result3);
   <li class="nav-item">
     <a class="nav-link active" href="descriptionOfRoom.php">Description of the room</a>
   </li>
+  <?php    if($_SESSION['loginId'] == $rows3['roomOwnerId']){ ?>
   <li class="nav-item">
     <a class="nav-link" href="addAnAssign.php">Add a new assignment</a>
   </li>
+  <?php } ?>
   <li class="nav-item">
     <a class="nav-link" href="addApost.php">Add a new post</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="logout.php">Logout</a>
   </li>
   </ul>
 <br>

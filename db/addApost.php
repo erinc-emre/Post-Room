@@ -63,9 +63,9 @@ if (isset($_POST['submit']) ) {
     $stmt2->bind_param('s', $contentId);
     if($stmt->execute()){
       if($stmt2->execute()){
-      ?> <p class="success"><?php echo "Registiration successful"; ?></p> <?php
+      ?> <p class="success"><?php echo " successful"; ?></p> <?php
    }}else{
-      ?> <p class="fail"><?php echo "Registiration failed"; ?></p> <?php
+      ?> <p class="fail"><?php echo " failed"; ?></p> <?php
    }
   }
     $stmt->close();
@@ -87,11 +87,16 @@ if (isset($_POST['submit']) ) {
   <li class="nav-item">
     <a class="nav-link" href="descriptionOfRoom.php">Description of the room</a>
   </li>
+  <?php    if($_SESSION['loginId'] == $rows3['roomOwnerId']){ ?>
   <li class="nav-item">
     <a class="nav-link" href="addAnAssign.php">Add a new assignment</a>
   </li>
+  <?php } ?>
   <li class="nav-item">
     <a class="nav-link active" href="addApost.php">Add a new post</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="logout.php">Logout</a>
   </li>
   </ul>
 

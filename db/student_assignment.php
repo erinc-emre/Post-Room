@@ -1,7 +1,14 @@
 <?php
 include('dbConnection.php');
+session_start();
+$contentId = ($_GET['contentId']);
+$sql_id = "SELECT * FROM assignment WHERE contentId='$contentId'";
+$result_id = mysqli_query($conn, $sql_id);
+$row_id=mysqli_fetch_assoc($result_id);
 
-$assigmentId = 1; // elle girdim düzeltilecek
+
+$assigmentId = $row_id['assignmentId'];
+
 $assignments = "SELECT user.fName, user.lName, assignmentresults.grade 
                     FROM user INNER JOIN assignmentresults ON user.userId = assignmentresults.userId 
                     WHERE assignmentresults.assignmentId = $assigmentId ORDER BY assignmentresults.grade DESC";
@@ -67,12 +74,13 @@ $result_assignments = mysqli_query($conn, $assignments);
 
 <body>
     <?php
-    $userId = 6; // elle girdim düzeltilip session ile tutulacak
+    $userId = $_SESSION['loginId']; 
     $contents = "SELECT * FROM assignmentresults r INNER JOIN assignment a ON r.assignmentId = a.assignmentId
                                                    INNER JOIN content c ON a.contentId = c.contentId
                                                    WHERE r.userId = $userId";
     $result_contents = mysqli_query($conn, $contents);
     while ($row_contents = mysqli_fetch_assoc($result_contents)) {
+        
         $assignmentId = $row_contents['assignmentId'];
         $grade = $row_contents['grade'];
         $deadline = $row_contents['deadline'];
@@ -82,6 +90,7 @@ $result_assignments = mysqli_query($conn, $assignments);
         $contentTitle = $row_contents['contentTitle']; 
         $contentText = $row_contents['contentText'];
         $additionalLink = $row_contents['additionalLink'];
+    
     }
     ?>
     <div class="container">

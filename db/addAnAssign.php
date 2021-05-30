@@ -4,8 +4,6 @@ session_start();
 <!DOCTYPE html>
 <?php 
 //$id = intval($_GET['roomId']);
-$result=mysqli_query($conn,"SELECT * FROM content");
-$rows=mysqli_fetch_assoc($result);
 $roomID = $_SESSION['ROOMID'];
 $result3 = mysqli_query($conn,"SELECT * FROM room WHERE roomId = $roomID");
 $rows3=mysqli_fetch_assoc($result3);
@@ -42,7 +40,7 @@ $titleErr = $descErr = $dateErr = "";
   </li>
   </ul>
 <br><br>
-<form method="POST" ?>" enctype="multipart/form-data" >
+<form method="POST" ?>
   <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">Title</label>
   <textarea class="form-control" name="title" rows="1"></textarea>
@@ -133,6 +131,31 @@ if (isset($_POST['submit']) ) {
   } else {
     die('prepare() failed: ' . htmlspecialchars($conn->error));
   }
+
+  $query_assignment = "SELECT * FROM assignment ORDER BY assignmentId DESC LIMIT 1";
+  $result_assignment = mysqli_query($conn,$query_assignment);
+  $row_assignment = mysqli_fetch_array($result_assignment);
+  $selected_assignmentId = $row_assignment ['assignmentId'];
+  
+  $grade=0;
+  $sql = mysqli_query($conn, "SELECT * FROM user");
+                        $new_array = array();
+                        while($row = mysqli_fetch_array($sql)){
+                        $new_array[$row['userId']] = $row['userId'];
+                        $id=$row['userId'];
+                        $queryString2 = "INSERT INTO assignmentresults (assignmentId, userId, grade) VALUES (?,?,?)";
+                        $query2 = $conn->prepare($queryString2);
+                        if($query2 !=false){
+                          $query2->bind_param('sss',$selected_assignmentId,$id ,$grade);
+                          if($query2->execute()){
+
+                          }
+                        }
+                        
+                    };
+                           
+
+
 }
 ?>
 

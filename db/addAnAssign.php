@@ -42,7 +42,7 @@ $titleErr = $descErr = $dateErr = "";
   </li>
   </ul>
 <br><br>
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
+<form method="POST" ?>" enctype="multipart/form-data" >
   <div class="mb-3">
   <label for="exampleFormControlTextarea1" class="form-label">Title</label>
   <textarea class="form-control" name="title" rows="1"></textarea>

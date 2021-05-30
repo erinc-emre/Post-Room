@@ -132,7 +132,7 @@ if($contentRow['typeId'] == 1){ ?>
   <input type='hidden' name='contentId' value='<?php echo $contentRow['contentId'];?>' />
   <button class="btn btn-outline-secondary" name="submit" type="submit" id="button-addon2">Share</button>
   </div>
- <p>dsdsssssssssssssss</p>
+
 </div>
 </form> 
 <?php }}} ?>

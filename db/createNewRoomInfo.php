@@ -42,14 +42,37 @@ if (isset($_POST['submit']) && $_FILES['fileName']['size'] > 0) {
     }
 $isArchived= 0;
 $sharableCode=getRandomString();
+$userId = $_SESSION['loginId'];
 
-    $stmt = $conn->prepare("INSERT INTO room (roomName,description,launchDate,isArchived,sharebleCode,roomPhoto) VALUES (?,?,?,?,?,?)");
+
+
+
+    $stmt = $conn->prepare("INSERT INTO room (roomOwnerId,roomName,description,launchDate,isArchived,sharebleCode,roomPhoto) VALUES (?,?,?,?,?,?,?)");
     if ($stmt != false ) {
-        $stmt->bind_param('ssssss',$roomName,$desc,$date,$isArchived,$sharableCode,$picture);
+        $stmt->bind_param('sssssss',$userId,$roomName,$desc,$date,$isArchived,$sharableCode,$picture);
         if($stmt->execute()){
           ?> <p class="success"><?php echo "added." ?></p> <?php
        }else{
           ?> <p class="fail"><?php echo " failed"; ?></p> <?php
+       }
+        $stmt->close();
+      } else {
+        die('prepare() failed: ' . htmlspecialchars($conn->error));
+      }
+    
+      $sql_roomId = "SELECT * FROM room ORDER BY roomId DESC LIMIT 1";
+      $result_roomId = mysqli_query($conn, $sql_roomId);
+      $rows_roomId = mysqli_fetch_assoc($result_roomId);
+      $roomId = $rows_roomId['roomId'];
+      $role = "Admin";
+
+      $stmt = $conn->prepare("INSERT INTO registration (roomId,userId,role,registrationDate) VALUES (?,?,?,?)");
+    if ($stmt != false ) {
+        $stmt->bind_param('ssss',$roomId,$userId,$role ,$date);
+        if($stmt->execute()){
+          ?> <p class="success"><?php echo "" ?></p> <?php
+       }else{
+          ?> <p class="fail"><?php echo ""; ?></p> <?php
        }
         $stmt->close();
       } else {

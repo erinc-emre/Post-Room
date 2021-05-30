@@ -21,7 +21,8 @@
             
             <input type="button" value="+Add new room" class="btn btn-primary" id="btnHome" style="float:right;margin: 30px;"
 onClick="document.location.href='createNewRoomInfo.php'" />
-
+<input type="button" value="+Join a room" class="btn btn-primary" id="btnHome" style="float:right;margin: 30px;"
+onClick="document.location.href='joinRoom.php'" />
         </nav> 
         <div class="main-heading">
            
@@ -34,10 +35,17 @@ onClick="document.location.href='createNewRoomInfo.php'" />
 <?php
 
 include('dbConnection.php');
+session_start();
+$loginId = $_SESSION['loginId'];
+$sql_registration = "SELECT * FROM registration WHERE userId='$loginId'";
+$result_registration = mysqli_query($conn, $sql_registration);
 
+while($rows_registration = mysqli_fetch_assoc($result_registration)){
 
-$query = "SELECT * FROM room";
+  $roomId = $rows_registration['roomId'];
+$query = "SELECT * FROM room WHERE roomId='$roomId'"; 
 $result = mysqli_query($conn, $query); ?>
+
 <div class="card-deck">
   <?php
 if (mysqli_num_rows($result) > 0) {
@@ -56,11 +64,15 @@ if (mysqli_num_rows($result) > 0) {
  
       <?php
 }
+
 } else {
   echo "0 results";
 }
 
-mysqli_close($conn);
+}
+
+
+
 ?>
 </div>
 

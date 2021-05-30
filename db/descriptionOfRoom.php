@@ -4,8 +4,7 @@ session_start();
 <!DOCTYPE html>
 <?php 
 //$id = intval($_GET['roomId']);
-$result=mysqli_query($conn,"SELECT * FROM content");
-$rows=mysqli_fetch_assoc($result);
+
 $roomID = $_SESSION['ROOMID'];
 $result3 = mysqli_query($conn,"SELECT * FROM room WHERE roomId = $roomID");
 $rows3=mysqli_fetch_assoc($result3);
